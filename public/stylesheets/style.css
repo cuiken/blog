@@ -146,3 +146,11 @@ article a:hover {
     margin-top: -2.5em;
     box-shadow: 0px 1px 4px #888;
 }
+
+.search {
+    border: 0;
+    width: 6em;
+    text-align: center;
+    font-size: 1em;
+    margin: 0.5em 0;
+}
