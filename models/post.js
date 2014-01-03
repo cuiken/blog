@@ -4,11 +4,12 @@
 var mongodb = require('./db'),
     markdown = require('markdown').markdown;
 
-function Post(name, title, tags, post) {
+function Post(name, head, title, tags, post) {
     this.name = name;
+    this.head = head;
     this.title = title;
-    this.tags = tags,
-        this.post = post;
+    this.tags = tags;
+    this.post = post;
 }
 
 module.exports = Post;
@@ -26,11 +27,13 @@ Post.prototype.save = function (callback) {
 
     var post = {
         name: this.name,
+        head: this.head,
         time: time,
         title: this.title,
         tags: this.tags,
         post: this.post,
-        comments: []
+        comments: [],
+        pv: 0
     }
 
     mongodb.open(function (err, db) {
@@ -103,17 +106,28 @@ Post.getOne = function (name, day, title, callback) {
                 "time.day": day,
                 "title": title
             }, function (err, doc) {
-                mongodb.close();
                 if (err) {
                     return callback(err);
                 }
                 if (doc) {
+                    collection.update({
+                        "name": name,
+                        "time.day": day,
+                        "title": title
+                    }, {
+                        $inc: {"pv": 1}
+                    }, function (err) {
+                        mongodb.close();
+                        if (err) {
+                            return callback(err);
+                        }
+                    });
                     doc.post = markdown.toHTML(doc.post);
                     doc.comments.forEach(function (comment) {
                         comment.content = markdown.toHTML(comment.content);
-                    })
+                    });
+                    callback(null, doc);
                 }
-                callback(null, doc);
             });
         });
     });
@@ -226,7 +240,7 @@ Post.getArchive = function (callback) {
     });
 };
 
-Post.getTags = function(callback) {
+Post.getTags = function (callback) {
     mongodb.open(function (err, db) {
         if (err) {
             return callback(err);
@@ -248,7 +262,7 @@ Post.getTags = function(callback) {
     });
 };
 
-Post.getTag = function(tag, callback) {
+Post.getTag = function (tag, callback) {
     mongodb.open(function (err, db) {
         if (err) {
             return callback(err);
