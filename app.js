@@ -30,11 +30,12 @@ app.use(express.methodOverride());
 app.use(express.cookieParser());
 app.use(express.session({
     secret: settings.cookieSecret,
-    key: settings.db,
+//    key: settings.db,
     cookie: {maxAge: 1000 * 60 * 60 * 24 * 30},
-    store: new MongoStore({
-        db: settings.db
-    })
+//    store: new MongoStore({
+//        db: settings.db
+//    })
+    url: settings.url
 }));
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
