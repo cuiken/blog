@@ -3,9 +3,9 @@
  */
 
 var crypto = require('crypto'),
-    User = require('../models/User.js'),
-    Post = require('../models/Post.js'),
-    Comment = require('../models/Comment.js'),
+    User = require('../models/user.js'),
+    Post = require('../models/post.js'),
+    Comment = require('../models/comment.js'),
     formidable = require('formidable'),
     fs = require('fs');
 
