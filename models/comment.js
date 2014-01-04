@@ -4,20 +4,17 @@
 //var mongodb = require('./db');
 var mongodb = require('mongodb').Db;
 var settings = require('../settings');
+var ObjectID = require('mongodb').ObjectID;
 
-function Comment(name, day, title, comment) {
-    this.name = name;
-    this.day = day;
-    this.title = title;
+function Comment(pid, comment) {
+    this.pid = pid;
     this.comment = comment;
 }
 
 module.exports = Comment;
 
 Comment.prototype.save = function (callback) {
-    var name = this.name,
-        day = this.day,
-        title = this.title,
+    var pid = this.pid,
         comment = this.comment;
     mongodb.connect(settings.url, function (err, db) {
         if (err) {
@@ -29,9 +26,7 @@ Comment.prototype.save = function (callback) {
                 return callback(err);
             }
             collection.update({
-                "name": name,
-                "title": title,
-                "time.day": day
+                "_id": new ObjectID(pid)
             }, {$push: {"comments": comment}}, function (err) {
                 db.close();
                 if (err) {

@@ -1,8 +1,8 @@
 <%- include header.ejs %>
 <p>
     <% if(user && (user.name == post.name)){ %>
-    <span><a href="/edit/<%= post.name %>/<%= post.time.day %>/<%= post.title %>" class="edit">编辑</a></span>
-    <spa><a href="/remove/<%= post.name %>/<%= post.time.day %>/<%= post.title %>" class="edit">删除</a></spa>
+    <span><a href="/edit/<%= post._id %>" class="edit">编辑</a></span>
+    <spa><a href="/remove/<%= post._id %>" class="edit">删除</a></spa>
     <% } %>
     <% var flag = 1 %>
     <% if (user && (user.name != post.name)) { %>
@@ -20,7 +20,7 @@
     <% flag = 0 %>
     <% } %>
     <% if (flag) { %>
-    <span><a class="edit" href="/reprint/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">转载</a></span>
+    <span><a class="edit" href="/reprint/<%= post._id %>">转载</a></span>
     <% } %>
 </p>
 <p class="info">
@@ -33,7 +33,7 @@
     <% } %>
     <% }) %>
     <% if (post.reprint_info.reprint_from) { %>
-    <br><a href="/u/<%= post.reprint_info.reprint_from.name %>/<%= post.reprint_info.reprint_from.day %>/<%= post.reprint_info.reprint_from.title %>">原文链接</a>
+    <br><a href="/p/<%= post.reprint_info.reprint_from._id %>">原文链接</a>
     <% } %>
 </p>
 <p><%- post.post %></p>
